@@ -1,4 +1,3 @@
-setwd("C:/Users/julia/Desktop/ia proj")
 install.packages(zoo)
 #importing data
 library(readxl)
@@ -7,11 +6,13 @@ stopyzwrotu <- read_excel("stopyzwrotu.xlsx")
 View(stopyzwrotu)
 str(stopyzwrotu)
 
+stopyzwrotu <- stopyzwrotu[,-1]
+
 #Variables for all calculations
 fundusz <- c(stopyzwrotu$fundusz)
-euro <- stopyzwrotu$euro
-ccc <- stopyzwrotu$ccc
-zloto <- stopyzwrotu$zloto
+euro <- c(stopyzwrotu$euro)
+ccc <- c(stopyzwrotu$ccc)
+zloto <- c(stopyzwrotu$zloto)
 fundusz
 #importing weights from file
 weights4inv <- read.table("weights4inv.txt",dec=",", header=TRUE, quote="\"",stringsAsFactors=FALSE)
@@ -23,7 +24,7 @@ w3 <- weights4inv$W3
 w3 <- as.numeric(w3)
 w4 <- weights4inv$W4
 w4 <- as.numeric(w4)
-?sd
+
 #calculating SD
 s1 <- sd(fundusz,na.rm=TRUE)
 s2 <- sd(euro)
@@ -61,9 +62,9 @@ results <- cbind(rbind(min.risk, max.effectivness, max.ip, max.w1, max.w2, max.w
 results
 write.csv(x=results, file = "results.csv", row.names=FALSE)
 #creating and saving OS
-plot(sdp, iportfolio, type= "p", col = "red")
+plot(sdp, iportfolio, type= "p", col = "red", xlim=c(0,0.5))
 
-title(main="Opportunity set for four risky assets without SS")
+# title(main="Opportunity set for four risky assets without SS")
 points(min.risk$sdp, min.risk$iportfolio, pch=19, col="green")
 points(max.effectivness$sdp, max.effectivness$iportfolio, pch=19, col="blue")
 points(max.ip$sdp, max.ip$iportfolio, pch=19, col="yellow")
@@ -71,12 +72,12 @@ points(max.w1$sdp, max.w1$iportfolio, pch=19, col="black")
 points(max.w2$sdp, max.w2$iportfolio, pch=19, col="black")
 points(max.w3$sdp, max.w3$iportfolio, pch=19, col="black")
 points(max.w4$sdp, max.w4$iportfolio, pch=19, col="black")
-legend(legend = c("Opportunity set without SS", "Minimum risk portfolio", "Maximum efficiency portfolio", "Maximum RoR portfolio", 
-                  "One-element portfolio"), 
-       pch = c(19, 19, 19, 19, 19), 
-       col = c("red", "green", "blue", "yellow", "black"), 
-       "right")
+# legend(legend = c("Opportunity set without SS", "Minimum risk portfolio", "Maximum efficiency portfolio", "Maximum RoR portfolio", 
+#                   "One-element portfolio"), 
+#        pch = c(19, 19, 19, 19, 19), 
+#        col = c("red", "green", "blue", "yellow", "black"), 
+#        "right")
 dev.copy(png, filename="plot.png")
 dev.off ()
-?legend
+
 
