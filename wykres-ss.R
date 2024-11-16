@@ -52,17 +52,24 @@ data <- as.data.frame(data)
 min.risk <- subset(data, data$sdp==min(data$sdp))
 max.effectivness <- subset(data, data$sharp==max(data$sharp))
 max.ip <- subset(data, data$iportfolio==max(data$iportfolio))
-max.w1 <- subset(data, data$w1==1)
-max.w2 <- subset(data, data$w2==1)
-max.w3 <- subset(data, data$w3==1)
-max.w4 <- subset(data, data$w4==1)
+max.w1 <- subset(data, data$w1==1 & data$w2==0 & data$w3==0 & data$w4==0)
+max.w2 <- subset(data, data$w2==1 & data$w2==1 & data$w3==0 & data$w4==0)
+max.w3 <- subset(data, data$w3==1 & data$w2==0 & data$w3==1 & data$w4==0)
+max.w4 <- subset(data, data$w4==1 & data$w2==0 & data$w3==0 & data$w4==1)
 des <- c("Minimal risk portfolio", "Maximum efficiency portfolio", "Maximum rate of return portfolio", "Max weight one portfolio", "Max weight two portfolio", "Max weight three portfolio", "Max weight four portfolio")
 #Creating table with results 3 portfolios and showing results in console
 results <- cbind(rbind(min.risk, max.effectivness, max.ip, max.w1, max.w2, max.w3, max.w4), des)
 results
-write.csv(x=results, file = "results.csv", row.names=FALSE)
+write.csv(x=results, file = "resultsss.csv", row.names=FALSE)
 #creating and saving OS
 plot(sdp, iportfolio, type= "p", col = "red", xlim=c(0,0.5))
+
+datawithoutSS <-subset(data, data$w1>=0)
+datawithoutSS <-subset(datawithoutSS, datawithoutSS$w2>=0)
+datawithoutSS <-subset(datawithoutSS, datawithoutSS$w3>=0)
+datawithoutSS <-subset(datawithoutSS, datawithoutSS$w4>=0)
+
+points(datawithoutSS$sdp,datawithoutSS$iportfolio, col = "purple")
 
 # title(main="Opportunity set for four risky assets without SS")
 points(min.risk$sdp, min.risk$iportfolio, pch=19, col="green")
@@ -77,7 +84,7 @@ legend(legend = c("Opportunity set without SS", "Minimum risk portfolio", "Maxim
        pch = c(19, 19, 19, 19, 19),
        col = c("red", "green", "blue", "yellow", "black"),
        "right")
-dev.copy(png, filename="plot.png")
+dev.copy(png, filename="plotss.png")
 dev.off ()
 
 
